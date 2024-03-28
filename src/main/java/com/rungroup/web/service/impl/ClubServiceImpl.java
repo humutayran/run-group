@@ -1,13 +1,17 @@
 package com.rungroup.web.service.impl;
 
+import com.rungroup.web.Mapper.ClubMapper;
 import com.rungroup.web.dto.ClubDto;
 import com.rungroup.web.models.Club;
 import com.rungroup.web.repository.ClubRepository;
 import com.rungroup.web.service.ClubService;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.rungroup.web.Mapper.ClubMapper.mapToClubDto;
@@ -15,7 +19,7 @@ import static com.rungroup.web.Mapper.ClubMapper.mapToClub;
 
 @Service
 public class ClubServiceImpl implements ClubService {
-    private ClubRepository clubRepository;
+    private final ClubRepository clubRepository;
 
     @Autowired
     public ClubServiceImpl(ClubRepository clubRepository) {
@@ -25,7 +29,7 @@ public class ClubServiceImpl implements ClubService {
     @Override
     public List<ClubDto> findAllClubs() {
         List<Club> clubs = clubRepository.findAll();
-        return clubs.stream().map((club) -> mapToClubDto(club)).collect(Collectors.toList());
+        return clubs.stream().map(ClubMapper::mapToClubDto).collect(Collectors.toList());
     }
 
 
@@ -36,6 +40,26 @@ public class ClubServiceImpl implements ClubService {
         Club club = mapToClub(clubDto);
         clubRepository.save(club);
         return club;
+    }
 
+    @Override
+    public ClubDto findClubById(Long clubId) {
+        return mapToClubDto(clubRepository.findById(clubId)
+                .orElseThrow(() -> new EntityNotFoundException("Club with ID " + clubId + " not found")));
+    }
+
+    public Club findClubByGiven(Long clubId) {
+        return clubRepository.findById(clubId)
+                .orElseThrow(() -> new EntityNotFoundException("Club with ID " + clubId + " not found"));
+    }
+
+    @Override
+    @Transactional
+    public ClubDto updateClub(long clubId, ClubDto clubDto) {
+        Club club = findClubByGiven(clubId);
+        club.setTitle(clubDto.getTitle());
+        club.setContent(clubDto.getContent());
+        club.setPhotoUrl(clubDto.getPhotoUrl());
+        return mapToClubDto(club);
     }
 }
