@@ -73,4 +73,10 @@ public class ClubController {
         return ResponseEntity.status(OK).body("club has been removed successfully");
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<ClubDto>> searchClubs(@RequestParam(value = "query") String query){
+        List<ClubDto> clubs = clubService.searchClubs(query);
+        return new ResponseEntity<>(clubs, OK);
+    }
+
 }
