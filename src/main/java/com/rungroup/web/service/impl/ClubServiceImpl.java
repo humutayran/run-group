@@ -1,6 +1,6 @@
 package com.rungroup.web.service.impl;
 
-import com.rungroup.web.Mapper.ClubMapper;
+import com.rungroup.web.mapper.ClubMapper;
 import com.rungroup.web.dto.ClubDto;
 import com.rungroup.web.models.Club;
 import com.rungroup.web.repository.ClubRepository;
@@ -11,11 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.rungroup.web.Mapper.ClubMapper.mapToClubDto;
-import static com.rungroup.web.Mapper.ClubMapper.mapToClub;
+import static com.rungroup.web.mapper.ClubMapper.mapToClubDto;
+import static com.rungroup.web.mapper.ClubMapper.mapToClub;
 
 @Service
 public class ClubServiceImpl implements ClubService {
@@ -61,5 +60,12 @@ public class ClubServiceImpl implements ClubService {
         club.setContent(clubDto.getContent());
         club.setPhotoUrl(clubDto.getPhotoUrl());
         return mapToClubDto(club);
+    }
+
+    @Override
+    public void deleteClub(long clubId) {
+
+        ClubDto clubDto = findClubById(clubId);
+        clubRepository.deleteById(clubId);
     }
 }

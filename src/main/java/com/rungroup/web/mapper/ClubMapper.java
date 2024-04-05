@@ -1,4 +1,4 @@
-package com.rungroup.web.Mapper;
+package com.rungroup.web.mapper;
 
 import com.rungroup.web.dto.ClubDto;
 import com.rungroup.web.models.Club;
