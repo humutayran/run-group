@@ -6,11 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.ManyToAny;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.cglib.core.Local;
 
-import java.security.PrivateKey;
 import java.time.LocalDateTime;
 
 @Data
@@ -33,6 +30,6 @@ public class Event {
     private LocalDateTime updatedOn;
 
     @ManyToOne
-    @JoinColumn(name = "club_id", nullable = false)
+    @JoinColumn(name="club_id", nullable = false)
     private Club club;
 }
